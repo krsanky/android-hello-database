@@ -1,19 +1,17 @@
 package org.oldcode.android;
 
-import android.app.Activity;
+import static android.provider.BaseColumns._ID;
+import static org.oldcode.android.Constants.TABLE_NAME;
+import static org.oldcode.android.Constants.TIME;
+import static org.oldcode.android.Constants.TITLE;
+import android.app.ListActivity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.SimpleCursorAdapter;
 
-import static android.provider.BaseColumns._ID;
-
-import static org.oldcode.android.Constants.TIME;
-import static org.oldcode.android.Constants.TITLE;
-import static org.oldcode.android.Constants.TABLE_NAME;
-
-public class Events extends Activity {
+public class Events extends ListActivity {
 
 	private EventsData events;
 	
@@ -51,21 +49,17 @@ public class Events extends Activity {
 		return cr;
 	}
 	
+	private static int[] TO = { R.id.rowid, R.id.time, R.id.title, };
 	private void showEvents(Cursor cursor) {
-		StringBuilder sb = new StringBuilder("Saved events:\n");
-		while(cursor.moveToNext()){
-			long id = cursor.getLong(0);
-			long time = cursor.getLong(1);
-			String title = cursor.getString(2);
-			sb.append(id).append(": ");
-			sb.append(time).append(": ");
-			sb.append(title).append("\n");
-		}
-		TextView txt = (TextView) findViewById(R.id.text);
-		
-		txt.setText(sb);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
+															  R.layout.item, 
+															  cursor, 
+															  FROM, 
+															  TO);
+		setListAdapter(adapter);
 	}
 
+	
 
 
 
